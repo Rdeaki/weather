@@ -14,7 +14,7 @@ var cityStoredList = [];
 var apiKey = "e128c304dce0ed805b85466358ba3039";
 
 var getCurrentWeather = function(cityName) {
-    var apiUrl = "api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + apiKey;
+    var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + apiKey + "&units=imperial";
 
     fetch(apiUrl).then(function(response) {
         response.json().then(function(data) {
@@ -31,7 +31,7 @@ var displayWeather = function(data, cityName) {
 };
 
 var displayForecast = function (cityName) {
-    var forecastURL = "https://api.openweathermap.org/data/2.5/onecall?q=" + cityName + "&exclude=minutely,houry,alerts&appid=" + apiKey;
+    var forecastURL = "https://api.openweathermap.org/data/2.5/onecall?q=" + cityName + "&exclude=minutely,houry,alerts&appid=" + apiKey + "&units=imperial";
 
     fetch(forecastURL)
     .then(response => response.json())
@@ -39,9 +39,13 @@ var displayForecast = function (cityName) {
 };
 
 var storeCity = function(saveName) {
-    cityStoredList.push(saveName);
-    localStorage.setItem("cityList", JSON.stringify(cityStoredList));
+
     cityStoredList = JSON.parse(localStorage.getItem("cityList"));
+    if (cityStoredList.indexOf(saveName) == -1) {
+        cityStoredList.push(saveName);
+        createBtn(saveName);
+    }
+    localStorage.setItem("cityList", JSON.stringify(cityStoredList));
     console.log(cityStoredList);
 };
 
